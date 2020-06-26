@@ -1,4 +1,5 @@
 # use_cluster
+
 a repo to collect information about using cluster
 
 Prérequis pour utiliser un cluster
@@ -87,7 +88,6 @@ Pour voir tous les jobs :
 ```
 > qstat
 ```
-```
 
 Pour supprimer un job :
 
@@ -95,8 +95,7 @@ Pour supprimer un job :
 > qdel your_job_id
 ```
 
-Exemple de script shell pour le cluster de l’UPMC pour lancer le script R “test-dompi.R”:
--------------------------------------------------------------------------------------------------------------------------------------------
+- Exemple de script shell pour le cluster de l’UPMC pour lancer le script R “test-dompi.R”:
 
 ```
 #PBS -S /bin/bash
@@ -132,13 +131,17 @@ mpi.quit()
 
 Pour les jobs nécessitant beaucoup de mémoire vive (type stats spatiales), privilégiez la queue alpha, pour les autres la beta. Si vous utilisez la queue alpha, le nombre de cœur (x) se précise de la manière suivante :
 
+```
 #PBS -l select=1:ncpus=x
+```
 
 Si vous utilisez la queue beta (plus appropriée pour nos usage), le nombre de
 cœur (x) est organisé en paquet de 24 cœurs, pour en prendre 48 il faut donc
 écrire :
 
+```
 #PBS -l select=2:ncpus=24:mpiprocs=24
+```
 
 Attention contrairement à sur un ordi, la moindre petite erreur (chargement de
 package pas installé sur le cluster..), va arrêter votre job, il faut donc
