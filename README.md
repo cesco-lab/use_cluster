@@ -200,6 +200,9 @@ S’il manque un package, il faut demander son install à pcia@mnhn.fr mais ils
 sont assez réactifs (a priori la plupart des packages courants sont déjà
 installés)
 
+## Commandes basiques
+
+## Exemples de script
 
 
 # Cluster GENOUEST :
