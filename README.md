@@ -202,7 +202,105 @@ installés)
 
 ## Commandes basiques
 
+Vous pouvez trouver les commandes basiques sur la [doc officielle](https://slurm.schedmd.com/quickstart.html) (un peu obscure)
+ou sur un [site de
+harvard](https://docs.rc.fas.harvard.edu/kb/convenient-slurm-commands/).
+
+Voici quelques basiques:
+
+```{bash}
+# Afficher la l'état des jobs: 
+squeue
+squeue -r <username>
+
+# Lancer un job:
+sbatch my_job.sh
+```
+
 ## Exemples de script
+
+Deux scripts sont généralement nécessaires pour exécuter une tache, un pour le
+gestionnaire des ressources du cluster (ici slurm) et un qui contient les
+algorithmes que vous voulez faire tourner (e.g. un script R au CESCO).
+
+### Script de soumission d'un job 
+
+C'est le script qui décrit le nom de votre travail, les logiciels à utiliser et
+également la quantité de ressources que vous désirez. 
+
+```{bash}
+#! /bin/bash -l
+
+#SBATCH -J random-noise
+#SBATCH -o random-noise.out
+#SBATCH -e random-noise.error
+#SBATCH --partition=type_2
+#SBATCH -n 5
+
+#SBATCH -t 04:00:00
+
+
+# Chargement des modules
+module load userspace/tr17.10
+module load biology
+module load lapack/3.7.1 
+module load jags/4.3.0 
+module load proj.4/4.9.3 
+module load geos/3.6.2 
+module load R/3.4.2
+
+Rscript pcia_r_test_parallel.R
+```
+
+Les spécifications qui suivent `#SBATCH` décrivent la tache que vous voulez
+faire au logiciel qui gère les ressources du cluster. Vous pouvez visiter la doc pour
+l'interprétation de ces options. La partie chargement des modules indique la
+liste des logiciels à charger avant d'exécuter la tache. La tache définie ici
+est simplement d'exécuter un script R avec le logiciel Rscript (dernière ligne). 
+ 
+Voici le contenu du script R qui est appelé dans le script de soumission de job:
+
+```{bash}
+#This script illustrates how to use multiple cores of a single cluster node#
+# for a repeated calculation with the parallel package in R
+
+library(parallel)
+
+cat("Number of cores:")
+detectCores()
+cat("\n")
+
+# Fast
+f <- system.time({
+  r <- mclapply(1:10, function(i)
+    {
+      Sys.sleep(10)  ## Do nothing for 10 seconds
+    }, mc.cores = 5)
+})
+
+cat("Parallel computation time:\n")
+f
+cat("\n")
+
+# slow
+
+s <- system.time({
+  r <- mclapply(1:10, function(i)
+    {
+      Sys.sleep(10)  ## Do nothing for 10 seconds
+    }, mc.cores = 1)
+})
+
+cat("Serial computation time:\n")
+s
+cat("\n")
+```
+
+Ce script propose de tester si la parallélisation du code R fonctionne bien.
+La Première partie utilise sur 5 cpus (option mc.cores) alors que la seconde
+en utilise un seul. On peut regarder les résultats dans le fichier
+`random-noise.out`, car le nom du fichier en sortie a été définie dans le script
+de soumission de job.
 
 
 # Cluster GENOUEST :
