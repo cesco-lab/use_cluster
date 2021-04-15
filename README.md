@@ -183,6 +183,10 @@ vous atterrissez quand vous vous connectez). Pour cela taper la commande ln -s
 Pour celleux qui ont besoin d’utiliser les packages spatiaux de R (rgdal, sp,
 sf, raster, etc), il faut ajouter les lignes module load gdal/2.2.2 et module
 load udunits/2.2.26 sous la ligne module load biology dans vos fichiers .slurm
+pour les ggplot & co, il faut ajouter avant la dernière ligne "module load gcc/7.2.0"
+On peut choisir la version 3.4 ou la 4.0 de R en éditant la dernière ligne de ce paragraphe :
+soit en "module load R/4.0.2" ou "module load R/3.4.2"
+
 Une fois toutes ces étapes faites, vous pouvez copier tous vos scripts R
 préférés et créer des fichiers .slurm (sur le modèle d’exemple.slurm) et juste
 éditer la dernière ligne par un Rscript MonScriptPrefere.R
